@@ -20,6 +20,7 @@ class L10nBrZip(models.Model):
 
     zip = fields.Char('CEP', size=8, required=True)
     street_type = fields.Char('Tipo', size=26)
+    street_type_2 = fields.Char('Tipo 2')
     street = fields.Char('Logradouro', size=72)
     district = fields.Char('Bairro', size=72)
     country_id = fields.Many2one('res.country', u'País')
