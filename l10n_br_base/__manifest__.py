@@ -14,6 +14,9 @@
         'base',
     ],
     'data': [
+        'security/ir.model.access.csv',
+        'views/l10n_br_base_view.xml',
+        'data/l10n_br_base.city.csv',
     ],
     'demo': [],
     'test': [],
