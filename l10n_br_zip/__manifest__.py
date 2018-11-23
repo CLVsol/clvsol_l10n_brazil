@@ -14,6 +14,10 @@
         'l10n_br_base',
     ],
     'data': [
+        'security/ir.model.access.csv',
+        'views/l10n_br_zip_view.xml',
+        'views/res_partner_view.xml',
+        # 'wizard/l10n_br_zip_search_view.xml',
     ],
     'demo': [],
     'test': [],
