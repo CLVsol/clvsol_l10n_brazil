@@ -12,6 +12,7 @@
     'website': 'https://github.com/CLVsol',
     'depends': [
         'base',
+        'contacts',
     ],
     'data': [
         'security/ir.model.access.csv',
