@@ -84,7 +84,7 @@ class WebServiceClient(object):
                     'district': str(
                         res.bairro) if res.bairro
                     else '',
-                    'street_type_2': str(
+                    'street_type': str(
                         res.complemento2) if res.complemento2
                     else '',
                     'l10n_br_city_id': city_ids.ids[
