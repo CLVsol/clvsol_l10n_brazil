@@ -20,7 +20,7 @@ class L10nBrZip(models.Model):
 
     zip = fields.Char('CEP', size=8, required=True)
     street_type = fields.Char('Tipo', size=26)
-    street_type_2 = fields.Char('Tipo 2')
+    # street_type_2 = fields.Char('Tipo 2')
     street = fields.Char('Logradouro', size=72)
     district = fields.Char('Bairro', size=72)
     country_id = fields.Many2one('res.country', u'País')
@@ -69,9 +69,10 @@ class L10nBrZip(models.Model):
                 'l10n_br_city_id': zip_obj.l10n_br_city_id.id,
                 'city': zip_obj.l10n_br_city_id.name,
                 'district': zip_obj.district,
-                'street': ((zip_obj.street_type or '') +
-                           ' ' + (zip_obj.street or '')) if
-                zip_obj.street_type else (zip_obj.street or ''),
+                # 'street': ((zip_obj.street_type or '') +
+                #            ' ' + (zip_obj.street or '')) if
+                # zip_obj.street_type else (zip_obj.street or ''),
+                'street': zip_obj.street,
                 'zip': zip_code,
             }
         else:

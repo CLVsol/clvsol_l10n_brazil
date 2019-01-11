@@ -8,9 +8,9 @@
             <field name="arch" type="xml">
                 <tree string="CEPs">
                     <field name="zip" select="1"/>
-                    <field name="district" select="1"/>
+                    <!--field name="district" select="1"/-->
                     <field name="street_type" select="1"/>
-                    <field name="street_type_2" select="1"/>
+                    <!--field name="street_type_2" select="1"/-->
                     <field name="street" select="1"/>
                     <field name="district" select="2"/>
                     <field name="country_id" select="2"/>
@@ -28,7 +28,7 @@
                     <group>             
                         <field name="zip" select="1"/>
                         <field name="street_type" select="1"/>
-                        <field name="street_type_2" select="1"/>
+                        <!--field name="street_type_2" select="1"/-->
                         <field name="street" select="1"/>
                         <field name="district" select="2"/>
                         <field name="country_id" select="2"/>
