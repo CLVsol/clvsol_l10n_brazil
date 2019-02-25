@@ -21,5 +21,5 @@ class L10nBrZip(models.Model):
         if len(zip_str) == 8:
             WebServiceClient(self).get_address(zip_str)
 
-        return super(L10nBrZip, self).zip_search_multi(
+        return super().zip_search_multi(
             country_id, state_id, l10n_br_city_id, district, street, zip_code)

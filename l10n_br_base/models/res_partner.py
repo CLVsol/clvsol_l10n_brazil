@@ -21,7 +21,7 @@ class ResPartner(models.Model):
     #     country_code = self.country_id.code or ''
     #     if self.country_id and country_code.upper() != 'BR':
     #         # this ensure other localizations could do what they want
-    #         return super(ResPartner, self)._display_address(
+    #         return super()._display_address(
     #             without_company=False)
     #     else:
     #         address_format = (
@@ -53,7 +53,7 @@ class ResPartner(models.Model):
 
         if address.country_id and address.country_id.code != 'BR':
             # this ensure other localizations could do what they want
-            return super(ResPartner, self)._display_address(
+            return super()._display_address(
                 without_company=False)
         else:
             address_format = (
@@ -216,7 +216,7 @@ class ResPartner(models.Model):
         """ Returns the list of address fields that are synced from the parent
         when the `use_parent_address` flag is set.
         Extenção para os novos campos do endereço """
-        address_fields = super(ResPartner, self)._address_fields()
+        address_fields = super()._address_fields()
         return list(address_fields + ['l10n_br_city_id', 'number', 'district'])
 
     # @api.multi
@@ -272,7 +272,7 @@ class ResPartner(models.Model):
 
 #     @api.multi
 #     def onchange_partner_id(self, partner_id):
-#         result = super(ResPartnerBank, self).onchange_partner_id(partner_id)
+#         result = super().onchange_partner_id(partner_id)
 #         partner = self.env['res.partner'].browse(partner_id)
 #         result['value']['number'] = partner.number
 #         result['value']['district'] = partner.district
