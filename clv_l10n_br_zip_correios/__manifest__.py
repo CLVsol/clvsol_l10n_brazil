@@ -11,7 +11,7 @@
     'license': 'AGPL-3',
     'website': 'https://github.com/CLVsol',
     'depends': [
-        'l10n_br_zip',
+        'clv_l10n_br_zip',
     ],
     'data': [
     ],
