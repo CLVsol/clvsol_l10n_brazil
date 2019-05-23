@@ -11,7 +11,7 @@
     'license': 'AGPL-3',
     'website': 'https://github.com/CLVsol',
     'depends': [
-        'l10n_br_base',
+        'clv_l10n_br_base',
     ],
     'data': [
         'security/ir.model.access.csv',
