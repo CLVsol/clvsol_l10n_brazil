@@ -24,7 +24,7 @@ class Company(models.Model):
     _name = "res.company"
     _inherit = ["res.company", "format.address.mixin"]
 
-    @api.multi
+    # @api.multi
     def _compute_l10n_br_data(self):
         """ Read the l10n_br specific functional fields. """
 
@@ -187,7 +187,7 @@ class Company(models.Model):
         if self.zip:
             self.zip = misc.format_zipcode(self.zip, self.country_id.code)
 
-    @api.multi
+    # @api.multi
     def write(self, values):
         try:
             result = super(Company, self).write(values)
