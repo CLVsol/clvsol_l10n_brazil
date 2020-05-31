@@ -4,7 +4,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
-from odoo.addons.l10n_br_base.tools import misc
+from odoo.addons.clv_l10n_br_base.tools import misc
 
 
 class L10nBrZip(models.Model):

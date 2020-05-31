@@ -12,7 +12,7 @@
     'website': 'http://odoo-brasil.org',
     'version': '12.0.1.0.0',
     'depends': [
-        'l10n_br_base'
+        'clv_l10n_br_base'
     ],
     'data': [
         'views/l10n_br_zip_view.xml',
