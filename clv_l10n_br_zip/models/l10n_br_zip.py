@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
 # Copyright (C) 2012  Renato Lima (Akretion)                                  #
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
-import re
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
-from odoo import models, fields, api
-from odoo.tools.translate import _
-from odoo.exceptions import except_orm
-from odoo.exceptions import Warning as UserError
+from odoo.addons.clv_l10n_br_base.tools import misc
 
 
 class L10nBrZip(models.Model):
@@ -18,39 +15,56 @@ class L10nBrZip(models.Model):
     _description = 'CEP'
     _rec_name = 'zip'
 
-    zip = fields.Char('CEP', size=8, required=True)
-    street_type = fields.Char('Tipo', size=26)
-    # street_type_2 = fields.Char('Tipo 2')
-    street = fields.Char('Logradouro', size=72)
-    district = fields.Char('Bairro', size=72)
-    country_id = fields.Many2one('res.country', u'País')
-    state_id = fields.Many2one(
-        'res.country.state', 'Estado',
-        domain="[('country_id','=',country_id)]")
-    l10n_br_city_id = fields.Many2one(
-        'l10n_br_base.city', 'Cidade',
-        required=True, domain="[('state_id','=',state_id)]")
+    zip = fields.Char(
+        string='CEP',
+        size=8,
+        required=True)
 
-    def set_domain(self, country_id=False, state_id=False,
-                   l10n_br_city_id=False, district=False,
-                   street=False, zip_code=False):
+    street_type = fields.Char(
+        string='Street Type',
+        size=26)
+
+    street = fields.Char(
+        string='Logradouro',
+        size=72)
+
+    district = fields.Char(
+        string='District',
+        size=72)
+
+    country_id = fields.Many2one(
+        comodel_name='res.country',
+        string='Country')
+
+    state_id = fields.Many2one(
+        comodel_name='res.country.state',
+        string='State',
+        domain="[('country_id','=',country_id)]")
+
+    city_id = fields.Many2one(
+        comodel_name='res.city',
+        string='City',
+        required=True,
+        domain="[('state_id','=',state_id)]")
+
+    def _set_domain(self, country_id=False, state_id=False,
+                    city_id=False, district=False,
+                    street=False, zip_code=False):
         domain = []
         if zip_code:
-            new_zip = re.sub('[^0-9]', '', zip_code or '')
+            new_zip = misc.punctuation_rm(zip_code or '')
             domain.append(('zip', '=', new_zip))
         else:
-            if not state_id or not l10n_br_city_id or \
-                    len(street or '') == 0:
-                raise except_orm(
-                    u'Parâmetros insuficientes',
-                    u'Necessário informar Estado, município e logradouro')
+            if not state_id or not city_id or len(street or '') == 0:
+                raise UserError(
+                    _('Necessário informar Estado, município e logradouro'))
 
             if country_id:
                 domain.append(('country_id', '=', country_id))
             if state_id:
                 domain.append(('state_id', '=', state_id))
-            if l10n_br_city_id:
-                domain.append(('l10n_br_city_id', '=', l10n_br_city_id))
+            if city_id:
+                domain.append(('city_id', '=', city_id))
             if district:
                 domain.append(('district', 'ilike', district))
             if street:
@@ -66,42 +80,34 @@ class L10nBrZip(models.Model):
             result = {
                 'country_id': zip_obj.country_id.id,
                 'state_id': zip_obj.state_id.id,
-                'l10n_br_city_id': zip_obj.l10n_br_city_id.id,
-                'city': zip_obj.l10n_br_city_id.name,
+                'city_id': zip_obj.city_id.id,
+                'city': zip_obj.city_id.name,
                 'district': zip_obj.district,
-                # 'street': ((zip_obj.street_type or '') +
-                #            ' ' + (zip_obj.street or '')) if
-                # zip_obj.street_type else (zip_obj.street or ''),
-                'street': zip_obj.street,
+                'street': ((zip_obj.street_type or '') +
+                           ' ' + (zip_obj.street or '')) if
+                zip_obj.street_type else (zip_obj.street or ''),
                 'zip': zip_code,
             }
         else:
             result = {}
         return result
 
-    def zip_search_multi(self, country_id=False,
-                         state_id=False, l10n_br_city_id=False,
-                         district=False, street=False, zip_code=False):
-        domain = self.set_domain(
-            country_id=country_id,
-            state_id=state_id,
-            l10n_br_city_id=l10n_br_city_id,
-            district=district,
-            street=street,
-            zip_code=zip_code)
-        return self.search(domain)
-
-    @api.multi
+    @api.model
     def zip_search(self, obj):
 
-        zip_ids = self.zip_search_multi(
-            country_id=obj.country_id.id,
-            state_id=obj.state_id.id,
-            l10n_br_city_id=obj.l10n_br_city_id.id,
-            district=obj.district,
-            street=obj.street,
-            zip_code=obj.zip,
-        )
+        try:
+            domain = self._set_domain(
+                country_id=obj.country_id.id,
+                state_id=obj.state_id.id,
+                city_id=obj.city_id.id,
+                district=obj.district,
+                street=obj.street,
+                zip_code=obj.zip)
+        except AttributeError as e:
+            raise UserError(
+                _('Erro a Carregar Atributo: ') + str(e))
+
+        zip_ids = self.search(domain)
 
         if len(zip_ids) == 1:
             result = self.set_result(zip_ids[0])
@@ -118,7 +124,7 @@ class L10nBrZip(models.Model):
                     obj.id,
                     country_id=obj.country_id.id,
                     state_id=obj.state_id.id,
-                    l10n_br_city_id=obj.l10n_br_city_id.id,
+                    city_id=obj.city_id.id,
                     district=obj.district,
                     street=obj.street,
                     zip_code=obj.zip,
@@ -128,7 +134,7 @@ class L10nBrZip(models.Model):
                 raise UserError(_('Nenhum registro encontrado'))
 
     def create_wizard(self, object_name, address_id, country_id=False,
-                      state_id=False, l10n_br_city_id=False,
+                      state_id=False, city_id=False,
                       district=False, street=False, zip_code=False,
                       zip_ids=False):
         context = dict(self.env.context)
@@ -138,7 +144,7 @@ class L10nBrZip(models.Model):
             'district': district,
             'country_id': country_id,
             'state_id': state_id,
-            'l10n_br_city_id': l10n_br_city_id,
+            'city_id': city_id,
             'zip_ids': zip_ids,
             'address_id': address_id,
             'object_name': object_name})
