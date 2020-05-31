@@ -13,7 +13,7 @@ from ..models.webservice_client import WebServiceClient
 
 class TestWebServiceClient(TransactionCase):
 
-    @mock.patch('openerp.addons.l10n_br_zip_correios.models.'
+    @mock.patch('odoo.addons.l10n_br_zip_correios.models.'
                 'webservice_client.WebServiceClient.search_zip_code')
     def test_search_zip_code(self, mock_api_call):
 
@@ -25,7 +25,7 @@ class TestWebServiceClient(TransactionCase):
         mock_api_call.side_effect = TransportError("", "")
         self.assertRaises(TransportError, web_client.search_zip_code, 70002900)
 
-    @mock.patch('openerp.addons.l10n_br_zip_correios.models.'
+    @mock.patch('odoo.addons.l10n_br_zip_correios.models.'
                 'webservice_client.WebServiceClient.search_zip_code')
     def test_get_address(self, mock_api_call):
 
