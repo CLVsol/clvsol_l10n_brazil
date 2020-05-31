@@ -9,7 +9,7 @@
     "author": "Akretion, " "Odoo Community Association (OCA)",
     "website": "http://odoo-brasil.org",
     "version": "12.0.2.0.0",
-    "depends": ["l10n_br_base"],
+    "depends": ["clv_l10n_br_base"],
     "data": [
         "views/l10n_br_zip_view.xml",
         "views/res_partner_address_view.xml",
