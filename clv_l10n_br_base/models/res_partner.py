@@ -30,7 +30,7 @@ class Partner(models.Model):
             address_format = (
                 self.country_id
                 and self.country_id.address_format
-                or "%(street)s, %(street_number)s %(street2)s\n%(district)s"
+                or "%(street_name)s, %(street_number)s %(street2)s\n%(district)s"
                 "\n%(zip)s - %(city)s-%(state_code)s\n%(country_name)s"
             )
             args = {
@@ -44,7 +44,7 @@ class Partner(models.Model):
 
             address_field = [
                 "title",
-                "street",
+                "street_name",
                 "street2",
                 "zip",
                 "city",
@@ -229,7 +229,7 @@ class Partner(models.Model):
     def get_street_fields(self):
         """Returns the fields that can be used in a street format.
         Overwrite this function if you want to add your own fields."""
-        return super(Partner, self).get_street_fields() + ["street"]
+        return super(Partner, self).get_street_fields() + ["street_name"]
 
     # @api.multi
     def _set_street(self):
