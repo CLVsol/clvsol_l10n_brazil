@@ -1,17 +1,11 @@
-# Copyright (C) 2009  Renato Lima - Akretion
-# License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
+# -*- coding: utf-8 -*-
+# Copyright (C) 2013-Today  Carlos Eduardo Vercelino - CLVsol
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models
 
 
 class City(models.Model):
-    """ Este objeto persite todos os municípios relacionado a um estado.
-    No Brasil é necesário em alguns documentos fiscais informar o código
-    do IBGE dos município envolvidos na transação.
-    """
-
     _inherit = "res.city"
 
     ibge_code = fields.Char(string="IBGE Code", size=7, index=True)
-    siafi_code = fields.Char(string="SIAFI Code", size=4)
-    anp_code = fields.Char(string="ANP Code", size=4)
