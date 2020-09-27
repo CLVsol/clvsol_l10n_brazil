@@ -13,6 +13,6 @@ Escopo desse repo
  
 Este projeto contêm os módulos básicos da localização brasileira do Odoo, para uso exclusivo pelas soluções da CLVsol.
 
-Os módulos desse projeto deverão ser substituídos pelos módulos equivalentes do repositório `OCA/l10n-brazil <https://github.com/OCA/l10n-brazil>`_, quando disponíveis para a versão do Odoo utilizada.
+Os módulos desse projeto poderão ser substituídos pelos módulos equivalentes do repositório `OCA/l10n-brazil <https://github.com/OCA/l10n-brazil>`_, quando disponíveis para a versão do Odoo utilizada.
 
 Developed by `CLVsol <https://github.com/CLVsol>`_.
