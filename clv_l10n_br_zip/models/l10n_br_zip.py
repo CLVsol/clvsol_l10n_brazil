@@ -36,7 +36,8 @@ class L10nBrZip(models.Model):
 
     zip_complement = fields.Char(string="Range", size=200)
 
-    street = fields.Char(string="Logradouro", size=72)
+    # street = fields.Char(string="Logradouro", size=72)
+    street_name = fields.Char(string="Logradouro", size=72)
 
     district = fields.Char(string="District", size=72)
 
@@ -61,7 +62,8 @@ class L10nBrZip(models.Model):
         state_id=False,
         city_id=False,
         district=False,
-        street=False,
+        # street=False,
+        street_name=False,
         zip_code=False,
     ):
         domain = []
@@ -69,7 +71,8 @@ class L10nBrZip(models.Model):
             new_zip = misc.punctuation_rm(zip_code or "")
             domain.append(("zip_code", "=", new_zip))
         else:
-            if not state_id or not city_id or len(street or "") == 0:
+            # if not state_id or not city_id or len(street or "") == 0:
+            if not state_id or not city_id or len(street_name or "") == 0:
                 raise UserError(_("Necessário informar Estado, município e logradouro"))
 
             if country_id:
@@ -80,12 +83,13 @@ class L10nBrZip(models.Model):
                 domain.append(("city_id", "=", city_id))
             if district:
                 domain.append(("district", "ilike", district))
-            if street:
-                domain.append(("street", "ilike", street))
+            # if street:
+            #     domain.append(("street", "ilike", street))
+            if street_name:
+                domain.append(("street_name", "ilike", street_name))
 
         return domain
 
-    # @api.multi
     def _zip_update(self):
         self.ensure_one()
         cep_update_days = int(
@@ -100,7 +104,6 @@ class L10nBrZip(models.Model):
                 # Update zip object
                 self.write(cep_values)
 
-    # @api.multi
     def set_result(self):
         self.ensure_one()
         self._zip_update()
@@ -109,10 +112,13 @@ class L10nBrZip(models.Model):
             "state_id": self.state_id.id,
             "city_id": self.city_id.id,
             "city": self.city_id.name,
-            "district": self.district,
-            "street": ((self.street_type or "") + " " + (self.street or ""))
+            # "district": self.district,
+            "street2": self.district,
+            # "street": ((self.street_type or "") + " " + (self.street or ""))
+            "street_name": ((self.street_type or "") + " " + (self.street_name or ""))
             if self.street_type
-            else (self.street or ""),
+            # else (self.street or ""),
+            else (self.street_name or ""),
             "zip": misc.format_zipcode(self.zip_code, self.country_id.code),
         }
 
@@ -141,7 +147,8 @@ class L10nBrZip(models.Model):
 
             values = {
                 "zip_code": zip_str,
-                "street": cep.get("logradouro"),
+                # "street": cep.get("logradouro"),
+                "street_name": cep.get("logradouro"),
                 "zip_complement": cep.get("complemento"),
                 "district": cep.get("bairro"),
                 "city_id": city.id or False,
@@ -159,13 +166,19 @@ class L10nBrZip(models.Model):
                 state_id=obj.state_id.id,
                 city_id=obj.city_id.id,
                 district=obj.district,
-                street=obj.street,
+                # street=obj.street,
+                street_name=obj.street_name,
                 zip_code=obj.zip,
             )
         except AttributeError as e:
             raise UserError(_("Erro a Carregar Atributo: ") + str(e))
 
+        print(">>>>>>>>>> obj:", obj)
+        print(">>>>>>>>>> domain:", domain)
+
         zips = self.search(domain)
+
+        print(">>>>>>>>>> zips:", zips)
 
         # One ZIP was found
         if len(zips) == 1:
@@ -196,7 +209,8 @@ class L10nBrZip(models.Model):
         wizard = self.env["l10n_br.zip.search"].create(
             {
                 "zip": obj.zip,
-                "street": obj.street,
+                # "street": obj.street,
+                "street_name": obj.street_name,
                 "district": obj.district,
                 "country_id": obj.country_id.id,
                 "state_id": obj.state_id.id,
@@ -220,7 +234,6 @@ class L10nBrZip(models.Model):
             "context": context,
         }
 
-    # @api.multi
     def zip_select(self):
         self.ensure_one()
         address_id = self._context.get("address_id")

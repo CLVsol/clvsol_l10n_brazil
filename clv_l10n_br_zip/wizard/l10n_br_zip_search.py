@@ -101,7 +101,6 @@ class L10nBrZipSearch(models.TransientModel):
             "context": context,
         }
 
-    # @api.multi
     def zip_new_search(self):
         data = self.read()[0]
         self.ensure_one()
