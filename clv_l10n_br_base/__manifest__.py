@@ -19,11 +19,10 @@
     "data": [
         "data/res.city.csv",
         "data/res.country.state.csv",
-        # "views/res_partner_address_view.xml",
-        # "views/res_config_settings_view.xml",
+        "data/res_country_data.xml",
         "views/res_city_view.xml",
         "views/res_country_state_view.xml",
-        # "views/res_partner_view.xml",
+        "views/res_partner_view.xml",
     ],
     "demo": [
     ],
